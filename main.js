@@ -25,25 +25,47 @@ document.body.appendChild(renderer.domElement);
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 16);
 const planeGeometry = new THREE.PlaneGeometry(10, 10);
-const planeGeometry2 = new THREE.PlaneGeometry(10,10);
+const planeGeometry2 = new THREE.PlaneGeometry(10, 10);
+const torusGeometry = new THREE.TorusGeometry(0.5, 0.2, 15, 100, Math.PI * 2);9
+//バッファジオメトリ
+const bufferGeometry = new THREE.BufferGeometry();
+
+const count = 50;
+const positionArray = new Float32Array(9 * count);
+
+for (let i = 0; i < count * 9; i++) {
+  positionArray[i] = (Math.random() - 0.5) * 2;
+}
+
+console.log(positionArray);
+const positionAttribute = new THREE.BufferAttribute(positionArray, 3);
+
+bufferGeometry.setAttribute("position", positionAttribute);
 
 //マテリアル
-const material = new THREE.MeshNormalMaterial({
-  // wireframe: true,
+const material = new THREE.MeshBasicMaterial({
+  wireframe: true,
+  color: "green"
 });
 
 //メッシュ化
 const box = new THREE.Mesh(boxGeometry, material);
 const sphere = new THREE.Mesh(sphereGeometry, material);
 const plane = new THREE.Mesh(planeGeometry, material);
-const plane2 = new THREE.Mesh(planeGeometry2, material)
+const plane2 = new THREE.Mesh(planeGeometry2, material);
+const torus = new THREE.Mesh(torusGeometry, material);
+
+const buffer = new THREE.Mesh(bufferGeometry, material);
 
 sphere.position.x = 1.5;
 plane.rotation.x = Math.PI * -0.5;
-plane.position.y = -0.5
+plane.position.y = -0.5;
 plane2.rotation.x = Math.PI * 0.5;
 plane2.position.y = -0.51;
-scene.add(box, sphere, plane, plane2);
+torus.position.x = -1.5;
+torus.position.y = 0.2;
+scene.add(buffer);
+// scene.add(box, sphere, plane, plane2, torus);
 
 //ライト
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
